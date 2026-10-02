@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Blog Search</title>
+</head>
+<body>
+    <h1>Tìm kiếm bài viết</h1>
+    <form method="GET" action="/search/">
+        <input type="text" name="q" placeholder="Nhập từ khóa..." value="{{ query }}">
+        <button type="submit">Tìm kiếm</button>
+    </form>
+
+    {% if query %}
+        <!-- LỖ HỔNG XSS: Sử dụng bộ lọc 'safe' làm tắt cơ chế chống XSS của Django -->
+        <h2>Kết quả tìm kiếm cho: {{ query | safe }}</h2>
+        <ul>
+            {% for post in results %}
+                <li><strong>{{ post.1 }}</strong>: {{ post.2 | safe }}</li>
+            {% empty %}
+                <li>Không tìm thấy bài viết nào.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

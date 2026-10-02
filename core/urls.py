@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from blog.views import search_blog
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('search/', search_blog, name='search_blog'),
 ]
