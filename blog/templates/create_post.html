@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body p-4">
+                <h4 class="mb-4 fw-bold">Đăng bài viết mới</h4>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Tiêu đề bài viết</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nội dung (Hỗ trợ HTML - Lỗ hổng Stored XSS)</label>
+                        <textarea name="content" rows="5" class="form-control" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Đính kèm File (Không giới hạn định dạng - Lỗ hổng Upload)</label>
+                        <input type="file" name="attachment" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success px-4">Xuất bản bài viết</button>
+                    <a href="/" class="btn btn-link text-secondary">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

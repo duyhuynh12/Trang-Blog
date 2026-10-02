@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from blog.views import search_blog
+from django.conf import settings
+from django.conf.urls.static import static
+from blog.views import home_and_search, user_login, user_logout, create_post, change_password, trigger_error
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('search/', search_blog, name='search_blog'),
-]
+    path('', home_and_search, name='home'),
+    path('search/', home_and_search, name='search_blog'),
+    path('login/', user_login, name='login'),
+    path('logout/', user_logout, name='logout'),
+    path('create/', create_post, name='create_post'),
+    path('change-password/', change_password, name='change_password'),
+    path('error-test/', trigger_error, name='trigger_error'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

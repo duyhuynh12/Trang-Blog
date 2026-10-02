@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middleware.SOCExceptionLoggingMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -136,12 +137,12 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'soc_format': {
-            'format': '{asctime} | {levelname} | {module} | {message}',
+            'format': '{asctime} | {levelname} | {message}',
             'style': '{',
         },
     },
     'handlers': {
-        'file': {
+        'security_file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': os.path.join(LOGS_DIR, 'security.log'),
@@ -152,15 +153,12 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['file', 'console'],
+        'blog.security': {
+            'handlers': ['security_file', 'console'],
             'level': 'INFO',
             'propagate': False,
         },
-        'blog.security': {
-            'handlers': ['file'],
-            'level': 'INFO',
-            'propagate': False,
-        }
     },
 }
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

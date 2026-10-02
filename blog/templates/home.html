@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+        <form method="GET" action="/" class="d-flex shadow-sm">
+            <input type="text" name="q" class="form-control form-control-lg border-0" placeholder="Tìm kiếm bài viết (Thử nghiệm SQLi & XSS tại đây)..." value="{{ query }}">
+            <button type="submit" class="btn btn-primary px-4">Tìm kiếm</button>
+        </form>
+    </div>
+</div>
+
+{% if query %}
+    <div class="alert alert-secondary">
+        <!-- LỖ HỔNG REFLECTED XSS -->
+        Kết quả tìm kiếm cho từ khóa: <strong>{{ query | safe }}</strong>
+    </div>
+{% endif %}
+
+<div class="row">
+    {% for post in results %}
+    <div class="col-md-6 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-body">
+                <h5 class="card-title text-primary fw-bold">{{ post.1 }}</h5>
+                <!-- LỖ HỔNG STORED XSS -->
+                <p class="card-text text-secondary">{{ post.2 | safe }}</p>
+                {% if post.3 %}
+                    <hr>
+                    <a href="/media/{{ post.3 }}" class="btn btn-sm btn-outline-dark" target="_blank">
+                        📎 Tải file đính kèm ({{ post.3 }})
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center text-muted my-5">
+        <h5>Không tìm thấy bài viết nào.</h5>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
