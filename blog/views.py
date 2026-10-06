@@ -23,16 +23,18 @@ def home_and_search(request):
         results = []
         try:
             with connection.cursor() as cursor:
-                # LỖ HỔNG SQLi: Ghép chuỗi trực tiếp
-                raw_sql = f"SELECT id, title, content, attachment FROM blog_post WHERE title LIKE '%{query}%' ORDER BY id DESC"
+                # LỖ HỔNG SQLi: Mặc định chỉ tìm trong các bài viết công khai (is_public = TRUE)
+                # Nhưng do không dùng ngoặc đơn bao quanh điều kiện OR khi bị tiêm mã độc, hacker có thể lấy được cả bài viết Private!
+                raw_sql = f"SELECT id, title, content, attachment FROM blog_post WHERE is_public = TRUE AND title LIKE '%{query}%' ORDER BY id DESC"
                 cursor.execute(raw_sql)
                 results = cursor.fetchall()
         except Exception as e:
             logger.error(f"SQL_ERROR | Query: '{query}' | IP: {ip} | Detail: {str(e).splitlines()[0]}")
     else:
-        # Hiển thị toàn bộ bài viết khi không tìm kiếm
+        # Trang chủ: Chỉ hiển thị các bài viết công khai (is_public = TRUE)
         with connection.cursor() as cursor:
-            cursor.execute("SELECT id, title, content, attachment FROM blog_post ORDER BY id DESC")
+            cursor.execute(
+                "SELECT id, title, content, attachment FROM blog_post WHERE is_public = TRUE ORDER BY id DESC")
             results = cursor.fetchall()
 
     return render(request, 'home.html', {'results': results, 'query': query})
