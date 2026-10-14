@@ -1,0 +1,28 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/soc_lab_logs/security.log
+  tags: ["django_app"]
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/soc_lab_logs/suricata/eve.json
+  tags: ["suricata_ids"]
+  json.keys_under_root: true
+  json.add_error_key: true
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/soc_lab_logs/nginx/modsec_audit.log
+  tags: ["modsecurity_waf"]
+  json.keys_under_root: true
+  json.add_error_key: true
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+
+setup.kibana:
+  host: "kibana:5601"
