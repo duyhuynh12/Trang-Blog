@@ -20,6 +20,12 @@
                         <input type="file" name="attachment" class="form-control">
                     </div>
                     <button type="submit" class="btn btn-success px-4">Xuất bản bài viết</button>
+                    <div class="form-check form-switch mb-4">
+                        <input class="form-check-input" type="checkbox" name="is_private" id="isPrivateCheck">
+                        <label class="form-check-label text-danger fw-semibold" for="isPrivateCheck">
+                             Đặt làm Bài viết ẩn (Tài liệu mật - Chỉ lộ khi bị SQL Injection)
+                        </label>
+                    </div>
                     <a href="/" class="btn btn-link text-secondary">Hủy</a>
                 </form>
             </div>

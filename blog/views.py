@@ -76,17 +76,22 @@ def create_post(request):
         title = request.POST.get('title')
         content = request.POST.get('content')
         uploaded_file = request.FILES.get('attachment')
+        # Nếu người dùng tích vào ô 'is_private' thì is_public sẽ là False
+        is_public = False if request.POST.get('is_private') == 'on' else True
 
-        # LỖ HỔNG UPLOAD: Không kiểm tra đuôi file (cho phép up .php, .py, .html, .exe...)
-        post = Post.objects.create(title=title, content=content, attachment=uploaded_file)
+        post = Post.objects.create(
+            title=title,
+            content=content,
+            attachment=uploaded_file,
+            is_public=is_public
+        )
 
         file_name = uploaded_file.name if uploaded_file else "None"
-        logger.info(
-            f"POST_CREATED | User: '{request.user.username}' | Title: '{title}' | File: '{file_name}' | IP: {ip}")
+        visibility = "PUBLIC" if is_public else "PRIVATE"
+        logger.info(f"POST_CREATED | User: '{request.user.username}' | Title: '{title}' | Visibility: {visibility} | File: '{file_name}' | IP: {ip}")
         return redirect('home')
 
     return render(request, 'create_post.html')
-
 
 @login_required(login_url='/login/')
 def change_password(request):
